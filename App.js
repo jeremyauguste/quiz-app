@@ -10,7 +10,7 @@ import * as React from 'react'
 
 const data = [
   {
-    "prompt": "What color are Sonic's shoes?",
+    "prompt": "Q1: What color are Sonic's shoes?",
     "type": "multiple-choice",
     "choices": [
       "Blue",
@@ -21,7 +21,7 @@ const data = [
     "correct": 3
   },
   {
-    "prompt": "Sonic is...",
+    "prompt": "Q2: Sonic is...",
     "type": "multiple-answer",
     "choices": [
       "fast",
@@ -32,7 +32,7 @@ const data = [
     "correct": [0, 3]
   },
   {
-    "prompt": "True or false: Sonic's shoes have buckles on them.",
+    "prompt": "Q3: True or false: Sonic's shoes have buckles on them.",
     "type": "true-false",
     "choices": [
       "True",
@@ -83,26 +83,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   answer: {
-    backgroundColor: '#78a0ff',
+    backgroundColor: '#ffffff',
     borderColor: 'black',
-    borderWidth: 1,
+    borderWidth: 2,
     padding: 5,
-    width: '100%',
-    height: '100px',
+    width: '300px',
     alignItems: 'center',
     display: 'flex',
     flexDirection: 'column',
-    borderRadius: 100,
+    borderRadius: 800,
     gap: 5
   },
   next: {
     backgroundColor: '#cfd9f0',
     borderColor: 'black',
-    borderWidth: 1,
+    borderWidth: 2,
     padding: 5,
-    width: '200px',
+    width: '300px',
+
     alignItems: 'center',
-    borderRadius: 100,
+    borderRadius: 800,
     textAlign: 'center',
   }
 });
@@ -170,7 +170,7 @@ function Question({ route }) {
 
   const nextMult = selectedIndexes.length > 0 && testID < 2 ? <Pressable style={styles.next} onPress={() => {
     {
-      testID++; if (selectedIndexes.includes(0) && selectedIndexes.includes(3)) { score++ }; navigation.replaceParams({
+      testID++; if ((selectedIndexes.includes(0) && selectedIndexes.includes(3) && (selectedIndexes.includes(1) == false) && selectedIndexes.includes(2) == false)) { score++ }; navigation.replaceParams({
         data: data, testID: testID, score: score
       })
     }; setSelectedIndexes([0])
@@ -183,11 +183,12 @@ function Question({ route }) {
   }}>Results</Pressable> : <Text style={styles.next}>Answer to Continue</Text>
 
   return (
-    <View>
+    <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
       <h2>{data[testID].prompt}</h2>
       <View style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 5 }}>
         {Array.isArray(data[testID].correct) ?
           <ButtonGroup
+            vertical
             buttonStyle={styles.answer}
             buttons={data[testID].choices}
             selectMultiple={true}
@@ -198,6 +199,7 @@ function Question({ route }) {
           :
           <ButtonGroup
             buttonStyle={styles.answer}
+            vertical
             buttons={data[testID].choices}
             selectedIndex={selectedIndex}
             onPress={(value) => setSelectedIndex(value)} />}
